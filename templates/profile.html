@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!--suppress HtmlFormInputWithoutLabel, JSUnresolvedLibraryURL, HtmlUnknownTarget, CssUnresolvedCustomProperty, SpellCheckingInspection -->
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Профиль</title>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<!--    <link rel="stylesheet" href="style.css"/>-->
+	<style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+
+        html {
+            box-sizing: border-box;
+            font-size: 20px;
+            text-align: center
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-image: radial-gradient(circle at 0% 0%, #373b52, #252736 51%, #1d1e26);
+        }
+
+        input {
+            border-style: none;
+            background: transparent;
+            outline: none;
+        }
+
+        button {
+            padding: 0;
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .spacer {
+            line-height: 2rem;
+            flex-grow: 1;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 1600px;
+            padding: 0 13px;
+            margin: 0 auto;
+        }
+
+        .style-input {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 2px;
+            padding: 0.5rem 0 0.5rem;
+        }
+
+        .style-input input {
+            text-align: center;
+            flex-grow: 1;
+            color: #f5f6ff;
+            font-size: 1.8rem;
+            line-height: 4rem;
+            vertical-align: middle;
+        }
+
+        .send {
+            position: relative;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: #f50b46;
+            padding: 25px 30px;
+            border: none;
+            color: #e4e4e4;
+            font-size: 23px;
+            cursor: pointer;
+            outline: none;
+            overflow: hidden;
+            border-radius: 85px;
+            bottom: 20%;
+            display: inline-block;
+            flex-direction: row;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .send span {
+            text-align: center;
+            position: relative;
+            pointer-events: none;
+        }
+
+        .send::before {
+            text-align: center;
+            --size: 0;
+            content: '';
+            position: absolute;
+            left: var(--x);
+            top: var(--y);
+            width: var(--size);
+            height: var(--size);
+            background: radial-gradient(circle closest-side, #4510dc, rgba(255, 255, 255, 0));
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            transition: width .1s ease, height .3s ease;
+        }
+
+        .send:hover::before {
+            --size: 397px;
+        }
+	</style>
+</head>
+<body>
+<a href="/" style="color: white; position: absolute; left: 0">Меню</a>
+<div class="container">
+	<form name="formpr" action="/profile" method="post">
+		<div class="style-input">
+			<input autocomplete="off" name="server" id="server" type="text" placeholder="MQTT сервер"
+			       value="{{ server }}"/>
+		</div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="port" id="port" type="number" placeholder="Порт сервера"
+			       value="{{ port }}"/>
+		</div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="username" id="username" type="text" placeholder="Имя пользователя"
+			       value="{{ username }}"/>
+		</div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="pass" id="pass" type="password" placeholder="Пароль"
+			       value="{{ password }}"/>
+		</div>
+
+		<div class="spacer">
+			<button class="send" id="spr">
+				<span>Сохранить</span>
+			</button>
+		</div>
+	</form>
+
+	<form name="formpas" action="/profile" method="post">
+
+		<div class="style-input">
+			<input autocomplete="off" name="old_password" id="old_password" type="password"
+			       placeholder="Старый пароль"/>
+		</div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="password" id="password" type="password" placeholder="Введите пароль"/>
+		</div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="repassword" id="repassword" type="password" placeholder="Повторите пароль"/>
+		</div>
+
+		<button class="send" id="spas">
+			<span>Сохранить</span>
+		</button>
+	</form>
+	<form action="/profile" method="post">
+		<button style="margin-top: 2rem" class="send" id="exit">
+			<span>Выйти</span>
+		</button>
+	</form>
+</div>
+
+<script>
+    {% if message %}
+        alert("{{ message }}");
+    {% endif %}
+    document.getElementById('spr').onmousemove = function (e) {
+        var x = e.pageX - e.target.offsetLeft;
+        var y = e.pageY - e.target.offsetTop;
+        e.target.style.setProperty('--x', x + 'px');
+        e.target.style.setProperty('--y', y + 'px');
+    };
+    document.getElementById('spas').onmousemove = function (e) {
+        var x = e.pageX - e.target.offsetLeft;
+        var y = e.pageY - e.target.offsetTop;
+        e.target.style.setProperty('--x', x + 'px');
+        e.target.style.setProperty('--y', y + 'px');
+    };
+    document.getElementById('exit').onmousemove = function (e) {
+        var x = e.pageX - e.target.offsetLeft;
+        var y = e.pageY - e.target.offsetTop;
+        e.target.style.setProperty('--x', x + 'px');
+        e.target.style.setProperty('--y', y + 'px');
+    };
+    document.formpr.onsubmit = function () {
+        if (document.getElementById("server").value.length > 0) {
+            if (document.getElementById("port").value.length > 0) {
+                if (document.getElementById("username").value.length > 0) {
+                    if (document.getElementById("pass").value.length > 0) {
+                        return true;
+                    } else {
+                        sweetAlert("Oops...", "Введите пароль", "error");
+                        return false;
+                    }
+                } else {
+                    sweetAlert("Oops...", "Введите имя пользователя", "error");
+                    return false;
+                }
+            } else {
+                sweetAlert("Oops...", "Введите порт", "error");
+                return false;
+            }
+        } else {
+            sweetAlert("Oops...", "Введите адресс сервера", "error");
+            return false;
+        }
+    };
+
+    document.formpas.onsubmit = function () {
+        if (document.getElementById("old_password").value.length > 0) {
+            if (document.getElementById("password").value.length > 0) {
+                if (document.getElementById("password").value === document.getElementById("repassword").value) {
+                    return true;
+                } else {
+                    sweetAlert("Oops...", "Пароли не совпадают", "error");
+                    return false;
+                }
+            } else {
+                sweetAlert("Oops...", "Введите новый пароль", "error");
+                return false;
+            }
+        } else {
+            sweetAlert("Oops...", "Введите старый пароль", "error");
+            return false;
+        }
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<!--suppress HtmlFormInputWithoutLabel, JSUnresolvedLibraryURL, HtmlUnknownTarget, CssUnresolvedCustomProperty, SpellCheckingInspection -->
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Добавление контроллера</title>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<style>
+		/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
+
+		html {
+			box-sizing: border-box;
+			font-size: 20px;
+			text-align: center
+		}
+
+		*, *:before, *:after {
+			box-sizing: inherit;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			background-image: radial-gradient(circle at 0% 0%, #373b52, #252736 51%, #1d1e26);
+		}
+
+		input {
+			border-style: none;
+			background: transparent;
+			outline: none;
+		}
+
+		button {
+			padding: 0;
+			background: none;
+			border: none;
+			outline: none;
+		}
+
+		.spacer {
+			flex-grow: 1;
+		}
+
+		.container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			height: 100vh;
+			max-width: 1600px;
+			padding: 0 15px;
+			margin: 0 auto;
+		}
+
+		.style-input input {
+			text-align: center;
+			flex-grow: 1;
+			color: #f5f6ff;
+			font-size: 1.8rem;
+			line-height: 5rem;
+			vertical-align: middle;
+		}
+
+		.send {
+			position: relative;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			background: #f50b46;
+			padding: 25px 30px;
+			border: none;
+			color: #e4e4e4;
+			font-size: 23px;
+			cursor: pointer;
+			outline: none;
+			overflow: hidden;
+			border-radius: 85px;
+			bottom: 20%;
+			display: inline-block;
+			flex-direction: row;
+			width: 100%;
+			max-width: 500px;
+			margin: 0 auto;
+		}
+
+		.send span {
+			text-align: center;
+			position: relative;
+			pointer-events: none;
+		}
+
+		.send::before {
+			text-align: center;
+			--size: 0;
+			content: '';
+			position: absolute;
+			left: var(--x);
+			top: var(--y);
+			width: var(--size);
+			height: var(--size);
+			background: radial-gradient(circle closest-side, #4510dc, rgba(255, 255, 255, 0));
+			-webkit-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+			transition: width .1s ease, height .3s ease;
+		}
+
+		.send:hover::before {
+			--size: 397px;
+		}
+
+		.rem {
+			color: white;
+			padding: 10px;
+		}
+
+		.rem input {
+			margin: 10px;
+		}
+
+		.menu {
+			color: white;
+			position: relative;
+			left: 10px;
+			top: 10px;
+		}
+
+	</style>
+</head>
+<body>
+<div style="position: absolute;
+			left: 0;
+			top: 0;">
+	<a href="/" class="menu">Меню</a>
+	<a class="menu" onclick="history.back(); return false;" href="/">Назад</a>
+</div>
+<form name="form" id="form">
+	<div class="container">
+		<div class="spacer"></div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="name" id="name" type="text" placeholder="Имя(Host name)"
+			       value="{{ name }}"/>
+		</div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="server" id="server" type="text" placeholder="MQTT сервер"
+			       value="{{ server }}"/>
+		</div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="port" id="port" type="number" placeholder="Порт сервера"
+			       value="{{ port }}"/>
+		</div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="username" id="username" type="text" placeholder="Имя пользователя"
+			       value="{{ username }}"/>
+		</div>
+
+		<div class="style-input">
+			<input autocomplete="off" name="pass" id="pass" type="password" placeholder="Пароль"
+			       value="{{ password }}"/>
+		</div>
+
+		<div class="rem">
+			<input name="set_topic" id="set_topic" type="checkbox"/>Отдельный топик на запись
+		</div>
+
+		<div class="spacer"></div>
+		<div class="spacer"></div>
+
+		<button class="send">
+			<span>Сохранить</span>
+		</button>
+	</div>
+</form>
+<script>
+	{% if set_topic %}
+		document.getElementById("set_topic").checked = true;
+	{% else %}
+		document.getElementById("set_topic").checked = false;
+	{% endif %}
+    document.querySelector('.send').onmousemove = function (e) {
+        let x = e.pageX - e.target.offsetLeft;
+        let y = e.pageY - e.target.offsetTop;
+        e.target.style.setProperty('--x', x + 'px');
+        e.target.style.setProperty('--y', y + 'px');
+    };
+    document.form.onsubmit = function () {
+        if (document.getElementById("name").value.length > 0) {
+            if (document.getElementById("server").value.length > 0) {
+                if (document.getElementById("port").value.length > 0) {
+                    if (document.getElementById("username").value.length > 0) {
+                        if (document.getElementById("pass").value.length > 0) {
+                            $.post("/controllers/{{ set }}", $("#form").serialize())
+                                .done(function (data) {
+                                    if (data === "ok") {
+                                        swal("Контроллер добавлен/обновлен", {icon: "success",});
+                                        setTimeout(() => {
+                                            location.href = "/controllers"
+                                        }, 500);
+                                    } else {
+                                        swal("Ошибка", {icon: "error",});
+                                    }
+                                });
+                            return false;
+                        } else {
+                            sweetAlert("Oops...", "Введите пароль", "error");
+                            return false;
+                        }
+                    } else {
+                        sweetAlert("Oops...", "Введите имя пользователя", "error");
+                        return false;
+                    }
+                } else {
+                    sweetAlert("Oops...", "Введите порт", "error");
+                    return false;
+                }
+            } else {
+                sweetAlert("Oops...", "Введите адресс сервера", "error");
+                return false;
+            }
+        } else {
+            sweetAlert("Oops...", "Введите Имя", "error");
+            return false;
+        }
+    };
+</script>
+</body>
+</html>

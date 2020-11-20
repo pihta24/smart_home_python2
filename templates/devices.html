@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ title }}</title>
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<style>
+		html {
+			box-sizing: border-box;
+			font-size: 20px;
+			margin: 0;
+			padding: 0;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			background-image: radial-gradient(circle at 0% 0%, #373b52, #252736 51%, #1d1e26);
+		}
+
+		*, *:before, *:after {
+			box-sizing: inherit;
+		}
+
+		.add {
+			color: white;
+			position: relative;
+			right: 10px;
+			top: 10px;
+		}
+
+		.menu {
+			color: white;
+			position: relative;
+			left: 10px;
+			top: 10px;
+		}
+
+		table {
+			table-layout: fixed;
+			color: white;
+			width: 100%;
+			margin: 1rem auto 0;
+			text-align: center;
+			border-top-color: white;
+			border-collapse: collapse;
+		}
+
+		td {
+			border-top: 1px solid white;
+		}
+
+	</style>
+</head>
+<body>
+<div style="position: absolute;
+			left: 0;
+			top: 0;">
+	<a href="/" class="menu">Меню</a>
+	<a class="menu" onclick="history.back(); return false;" href="/">Назад</a>
+</div>
+<div style="position: absolute;
+			right: 0;
+			top: 0;">
+	{% if type == "devices" or type == "sensors" %}
+	<a class="add" href="{{ href }}settings">Настройки</a>
+	{% endif %}
+	<a href="{{ href }}add" class="add">Добавить</a>
+</div>
+<table>
+	<caption>{{ caption }}</caption>
+	<thead>
+	<tr>
+		{% for i in head %}
+			<th>{{ i }}</th>
+		{% endfor %}
+	</tr>
+	</thead>
+	<tbody>
+	{% for i in data %}
+		<tr data-href="{{ href }}{{ i[0] }}">
+			{% for j in i %}
+				<td>{{ j }}</td>
+			{% endfor %}
+			<td><a onclick="delete_dev(this.id)" id="{{ i[0] }}">Удалить</a></td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+<!--suppress EqualityComparisonWithCoercionJS -->
+<script>
+    jQuery(function ($) {
+        $('tbody tr[data-href]').addClass('clickable').click(function () {
+            window.location = $(this).attr('data-href');
+        }).find('a').hover(function () {
+            $(this).parents('tr').unbind('click');
+        }, function () {
+            $(this).parents('tr').click(function () {
+                window.location = $(this).attr('data-href');
+            });
+        });
+    });
+    delete_dev = function (id) {
+        swal({
+            title: "Вы уверенны?",
+            text: "После удаления вы не сможете восстановить это устройство",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.post("/{{ type }}/" + id + "/delete")
+                    .done(function (data) {
+                        if (data == "ok") {
+                            swal("Устройство удалено!", {icon: "success",});
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
+                        } else {
+                            swal("Ошибка при удалении", {icon: "error",});
+                        }
+                    });
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<!--suppress HtmlFormInputWithoutLabel, CssUnknownProperty, JSUnresolvedLibraryURL, CssUnusedSymbol, CssUnresolvedCustomProperty, SpellCheckingInspection -->
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<title>Добавление устройства</title>
+	<!--Анимация-->
+	<style>
+		.windows8 {
+			position: relative;
+			width: 140px;
+			height: 140px;
+			margin: auto;
+		}
+
+		.windows8 .wBall {
+			position: absolute;
+			width: 133px;
+			height: 133px;
+			opacity: 0;
+			transform: rotate(225deg);
+			-o-transform: rotate(225deg);
+			-ms-transform: rotate(225deg);
+			-webkit-transform: rotate(225deg);
+			-moz-transform: rotate(225deg);
+			animation: orbit 5.4425s infinite;
+			-o-animation: orbit 5.4425s infinite;
+			-ms-animation: orbit 5.4425s infinite;
+			-webkit-animation: orbit 5.4425s infinite;
+			-moz-animation: orbit 5.4425s infinite;
+		}
+
+		.windows8 .wBall .wInnerBall {
+			position: absolute;
+			width: 18px;
+			height: 18px;
+			background: rgb(255, 255, 255);
+			left: 0;
+			top: 0;
+			border-radius: 18px;
+		}
+
+		.windows8 #wBall_1 {
+			animation-delay: 1.186s;
+			-o-animation-delay: 1.186s;
+			-ms-animation-delay: 1.186s;
+			-webkit-animation-delay: 1.186s;
+			-moz-animation-delay: 1.186s;
+		}
+
+		.windows8 #wBall_2 {
+			animation-delay: 0.233s;
+			-o-animation-delay: 0.233s;
+			-ms-animation-delay: 0.233s;
+			-webkit-animation-delay: 0.233s;
+			-moz-animation-delay: 0.233s;
+		}
+
+		.windows8 #wBall_3 {
+			animation-delay: 0.4765s;
+			-o-animation-delay: 0.4765s;
+			-ms-animation-delay: 0.4765s;
+			-webkit-animation-delay: 0.4765s;
+			-moz-animation-delay: 0.4765s;
+		}
+
+		.windows8 #wBall_4 {
+			animation-delay: 0.7095s;
+			-o-animation-delay: 0.7095s;
+			-ms-animation-delay: 0.7095s;
+			-webkit-animation-delay: 0.7095s;
+			-moz-animation-delay: 0.7095s;
+		}
+
+		.windows8 #wBall_5 {
+			animation-delay: 0.953s;
+			-o-animation-delay: 0.953s;
+			-ms-animation-delay: 0.953s;
+			-webkit-animation-delay: 0.953s;
+			-moz-animation-delay: 0.953s;
+		}
+
+
+		@keyframes orbit {
+			0% {
+				opacity: 1;
+				z-index: 99;
+				transform: rotate(180deg);
+				animation-timing-function: ease-out;
+			}
+
+			7% {
+				opacity: 1;
+				transform: rotate(300deg);
+				animation-timing-function: linear;
+				origin: 0%;
+			}
+
+			30% {
+				opacity: 1;
+				transform: rotate(410deg);
+				animation-timing-function: ease-in-out;
+				origin: 7%;
+			}
+
+			39% {
+				opacity: 1;
+				transform: rotate(645deg);
+				animation-timing-function: linear;
+				origin: 30%;
+			}
+
+			70% {
+				opacity: 1;
+				transform: rotate(770deg);
+				animation-timing-function: ease-out;
+				origin: 39%;
+			}
+
+			75% {
+				opacity: 1;
+				transform: rotate(900deg);
+				animation-timing-function: ease-out;
+				origin: 70%;
+			}
+
+			76% {
+				opacity: 0;
+				transform: rotate(900deg);
+			}
+
+			100% {
+				opacity: 0;
+				transform: rotate(900deg);
+			}
+		}
+
+		@-o-keyframes orbit {
+			0% {
+				opacity: 1;
+				z-index: 99;
+				-o-transform: rotate(180deg);
+				-o-animation-timing-function: ease-out;
+			}
+
+			7% {
+				opacity: 1;
+				-o-transform: rotate(300deg);
+				-o-animation-timing-function: linear;
+				-o-origin: 0%;
+			}
+
+			30% {
+				opacity: 1;
+				-o-transform: rotate(410deg);
+				-o-animation-timing-function: ease-in-out;
+				-o-origin: 7%;
+			}
+
+			39% {
+				opacity: 1;
+				-o-transform: rotate(645deg);
+				-o-animation-timing-function: linear;
+				-o-origin: 30%;
+			}
+
+			70% {
+				opacity: 1;
+				-o-transform: rotate(770deg);
+				-o-animation-timing-function: ease-out;
+				-o-origin: 39%;
+			}
+
+			75% {
+				opacity: 1;
+				-o-transform: rotate(900deg);
+				-o-animation-timing-function: ease-out;
+				-o-origin: 70%;
+			}
+
+			76% {
+				opacity: 0;
+				-o-transform: rotate(900deg);
+			}
+
+			100% {
+				opacity: 0;
+				-o-transform: rotate(900deg);
+			}
+		}
+
+		@-ms-keyframes orbit {
+			0% {
+				opacity: 1;
+				z-index: 99;
+				-ms-transform: rotate(180deg);
+				-ms-animation-timing-function: ease-out;
+			}
+
+			7% {
+				opacity: 1;
+				-ms-transform: rotate(300deg);
+				-ms-animation-timing-function: linear;
+				-ms-origin: 0%;
+			}
+
+			30% {
+				opacity: 1;
+				-ms-transform: rotate(410deg);
+				-ms-animation-timing-function: ease-in-out;
+				-ms-origin: 7%;
+			}
+
+			39% {
+				opacity: 1;
+				-ms-transform: rotate(645deg);
+				-ms-animation-timing-function: linear;
+				-ms-origin: 30%;
+			}
+
+			70% {
+				opacity: 1;
+				-ms-transform: rotate(770deg);
+				-ms-animation-timing-function: ease-out;
+				-ms-origin: 39%;
+			}
+
+			75% {
+				opacity: 1;
+				-ms-transform: rotate(900deg);
+				-ms-animation-timing-function: ease-out;
+				-ms-origin: 70%;
+			}
+
+			76% {
+				opacity: 0;
+				-ms-transform: rotate(900deg);
+			}
+
+			100% {
+				opacity: 0;
+				-ms-transform: rotate(900deg);
+			}
+		}
+
+		@-webkit-keyframes orbit {
+			0% {
+				opacity: 1;
+				z-index: 99;
+				-webkit-transform: rotate(180deg);
+				-webkit-animation-timing-function: ease-out;
+			}
+
+			7% {
+				opacity: 1;
+				-webkit-transform: rotate(300deg);
+				-webkit-animation-timing-function: linear;
+				-webkit-origin: 0%;
+			}
+
+			30% {
+				opacity: 1;
+				-webkit-transform: rotate(410deg);
+				-webkit-animation-timing-function: ease-in-out;
+				-webkit-origin: 7%;
+			}
+
+			39% {
+				opacity: 1;
+				-webkit-transform: rotate(645deg);
+				-webkit-animation-timing-function: linear;
+				-webkit-origin: 30%;
+			}
+
+			70% {
+				opacity: 1;
+				-webkit-transform: rotate(770deg);
+				-webkit-animation-timing-function: ease-out;
+				-webkit-origin: 39%;
+			}
+
+			75% {
+				opacity: 1;
+				-webkit-transform: rotate(900deg);
+				-webkit-animation-timing-function: ease-out;
+				-webkit-origin: 70%;
+			}
+
+			76% {
+				opacity: 0;
+				-webkit-transform: rotate(900deg);
+			}
+
+			100% {
+				opacity: 0;
+				-webkit-transform: rotate(900deg);
+			}
+		}
+
+		@-moz-keyframes orbit {
+			0% {
+				opacity: 1;
+				z-index: 99;
+				-moz-transform: rotate(180deg);
+				-moz-animation-timing-function: ease-out;
+			}
+
+			7% {
+				opacity: 1;
+				-moz-transform: rotate(300deg);
+				-moz-animation-timing-function: linear;
+				-moz-origin: 0%;
+			}
+
+			30% {
+				opacity: 1;
+				-moz-transform: rotate(410deg);
+				-moz-animation-timing-function: ease-in-out;
+				-moz-origin: 7%;
+			}
+
+			39% {
+				opacity: 1;
+				-moz-transform: rotate(645deg);
+				-moz-animation-timing-function: linear;
+				-moz-origin: 30%;
+			}
+
+			70% {
+				opacity: 1;
+				-moz-transform: rotate(770deg);
+				-moz-animation-timing-function: ease-out;
+				-moz-origin: 39%;
+			}
+
+			75% {
+				opacity: 1;
+				-moz-transform: rotate(900deg);
+				-moz-animation-timing-function: ease-out;
+				-moz-origin: 70%;
+			}
+
+			76% {
+				opacity: 0;
+				-moz-transform: rotate(900deg);
+			}
+
+			100% {
+				opacity: 0;
+				-moz-transform: rotate(900deg);
+			}
+		}</style>
+	<style>
+		/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
+
+		.load {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-right: -50%;
+			transform: translate(-50%, -50%)
+		}
+
+		select {
+			text-align-last: center;
+			text-align: center;
+			background: #505478;
+			color: white;
+			top: 40px;
+			position: relative;
+			left: 50%;
+			margin-right: -50%;
+			transform: translate(-50%, -50%)
+		}
+
+		html {
+			box-sizing: border-box;
+			font-size: 20px;
+			margin: 0;
+			padding: 0;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			background-image: radial-gradient(circle at 0% 0%, #373b52, #252736 51%, #1d1e26);
+		}
+
+		*, *:before, *:after {
+			box-sizing: inherit;
+		}
+
+		input {
+			border-style: none;
+			background: transparent;
+			outline: none;
+		}
+
+		button {
+			padding: 0;
+			background: none;
+			border: none;
+			outline: none;
+		}
+
+		.spacer {
+			flex-grow: 1;
+		}
+
+		.container_b {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			height: 100vh;
+			max-width: 1600px;
+			padding: 0 15px;
+			margin: 0 auto;
+		}
+
+		.style-input {
+			margin: 0 auto;
+		}
+
+		.style-input input {
+			text-align: center;
+			flex-grow: 1;
+			color: #f5f6ff;
+			font-size: 1.8rem;
+			line-height: 5rem;
+			vertical-align: middle;
+		}
+
+		.send {
+			position: relative;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			background: #f50b46;
+			padding: 25px 30px;
+			border: none;
+			color: #e4e4e4;
+			font-size: 23px;
+			cursor: pointer;
+			outline: none;
+			overflow: hidden;
+			border-radius: 85px;
+			bottom: 20%;
+			display: inline-block;
+			flex-direction: row;
+			width: 100%;
+			max-width: 500px;
+			margin: 0 auto;
+		}
+
+		.send span {
+			text-align: center;
+			position: relative;
+			pointer-events: none;
+		}
+
+		.send::before {
+			text-align: center;
+			--size: 0;
+			content: '';
+			position: absolute;
+			left: var(--x);
+			top: var(--y);
+			width: var(--size);
+			height: var(--size);
+			background: radial-gradient(circle closest-side, #4510dc, rgba(255, 255, 255, 0));
+			-webkit-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+			transition: width .1s ease, height .3s ease;
+		}
+
+		.send:hover::before {
+			--size: 397px;
+		}
+
+		.rem {
+			margin: 0 auto;
+			position: relative;
+			color: white;
+			padding: 10px;
+			top: 10px;
+		}
+
+		.rem input {
+			margin: 10px;
+		}
+
+		.menu {
+			color: white;
+			position: relative;
+			left: 10px;
+			top: 10px;
+		}
+	</style>
+</head>
+<body>
+<div style="position: absolute;
+			left: 0;
+			top: 0;">
+	<a href="/" class="menu">Меню</a>
+	<a class="menu" onclick="history.back(); return false;" href="/">Назад</a>
+</div>
+<form name="form" id="form">
+	<div style="position: absolute;
+	top: 20px;
+			left: 50%;
+			margin-right: -50%;
+			transform: translate(-50%, -50%)" class="style-input">
+		<input autocomplete="off" name="name" id="name" type="text" placeholder="Имя"
+		       value="{{ name }}"/>
+	</div>
+	<select id="type" name="type">
+		<option value="select" selected disabled>Выберите тип</option>
+		<option value="gpio">GPIO</option>
+		<option value="thermo">Термостат</option>
+		<option value="thermo_gpio">Термостат с поддержкой ручного управления</option>
+	</select>
+	<div class="container_b">
+
+	</div>
+</form>
+<script>
+	{% if type %}
+        $("#type").value = {{ type }}
+    {% endif %}
+    $("#type").change(function () {
+        switch ($(this).val()) {
+            case "gpio": {
+                document.querySelector(".container_b").innerHTML = "<div class=\"style-input\">\n" +
+                    "\t\t\t<input autocomplete=\"off\" name=\"number\" id=\"number\" type=\"number\" placeholder=\"Номер\" value=\"{{ number }}\"/>\n" +
+                    "\t\t</div>\n" +
+                    "\t\t<div class=\"rem\">\n" +
+                    "\t\t\tСостояние включения\n" +
+                    "\t\t</div>\n" +
+                    "\t\t<div class=\"rem\">\n" +
+                    "\t\t\t<input type=\"radio\" name=\"on\" checked value=\"1\">1\n" +
+                    "\t\t\t<input type=\"radio\" name=\"on\" value=\"0\">0\n" +
+                    "\t\t</div>\n" +
+                    "\t\t<div class=\"spacer\"></div>\n" +
+                    "\t\t<button class=\"send\">\n" +
+                    "\t\t\t<span>Сохранить</span>\n" +
+                    "\t\t</button>";
+                break;
+            }
+            case "thermo": {
+                document.querySelector(".container_b").innerHTML = "<div class=\"style-input\">\n" +
+                    "\t\t\t<input autocomplete=\"off\" name=\"number\" id=\"number\" type=\"number\" placeholder=\"Номер\" value=\"{{ number }}\">\n" +
+                    "\t\t</div>\n" +
+                    "\t\t<div class=\"spacer\"></div>\n" +
+                    "\t\t<button class=\"send\">\n" +
+                    "\t\t\t<span>Сохранить</span>\n" +
+                    "\t\t</button>";
+                break;
+            }
+            case "thermo_gpio": {
+                document.querySelector(".container_b").innerHTML = "<div class=\"style-input\">\n" +
+                    "\t\t\t<input autocomplete=\"off\" name=\"number_t\" id=\"number_t\" type=\"number\" placeholder=\"Номер термостата\"\n" +
+                    "\t\t\t       value=\"{{ number_t }}\">\n" +
+                    "\t\t</div>\n" +
+                    "\t\t<div class=\"style-input\">\n" +
+                    "\t\t\t<input autocomplete=\"off\" name=\"number_g\" id=\"number_g\" type=\"number\" placeholder=\"Номер GPIO\"\n" +
+                    "\t\t\t       value=\"{{ number_g }}\">\n" +
+                    "\t\t</div>\n" +
+                    "\t\t<div class=\"rem\">\n" +
+                    "\t\t\tСостояние включения\n" +
+                    "\t\t</div>\n" +
+                    "\t\t<div class=\"rem\">\n" +
+                    "\t\t\t<input type=\"radio\" name=\"on\" checked=\"\" value=\"1\">1\n" +
+                    "\t\t\t<input type=\"radio\" name=\"on\" value=\"0\">0\n" +
+                    "\t\t</div>\n" +
+                    "\t\t<div class=\"spacer\"></div>\n" +
+                    "\t\t<button class=\"send\">\n" +
+                    "\t\t\t<span>Сохранить</span>\n" +
+                    "\t\t</button>"
+            }
+        }
+        document.querySelector('.send').onmousemove = function (e) {
+            let x = e.pageX - e.target.offsetLeft;
+            let y = e.pageY - e.target.offsetTop;
+            e.target.style.setProperty('--x', x + 'px');
+            e.target.style.setProperty('--y', y + 'px');
+        };
+        document.form.onsubmit = function () {
+            switch ($("#type").val()) {
+                case "gpio":
+                case "thermo":
+                    if (document.getElementById("name").value.length > 0) {
+                        if (document.getElementById("number").value.length > 0) {
+                            $.post("/controllers/{{ id }}/add", $("#form").serialize())
+                                .done(function (data) {
+                                    if (data === "ok") {
+                                        swal("Устройство добавлено", {icon: "success",});
+                                        setTimeout(() => {
+                                            location.href = "/controllers/{{ id }}"
+                                        }, 500);
+                                    } else {
+                                        swal("Произошла ошибка", {icon: "error",});
+                                    }
+                                });
+                        } else {
+                            sweetAlert("Oops...", "Введите номер", "error");
+                        }
+                    } else {
+                        sweetAlert("Oops...", "Введите имя", "error");
+                    }
+                    break;
+                case "thermo_gpio":
+                    if (document.getElementById("name").value.length > 0) {
+                        if (document.getElementById("number_g").value.length > 0) {
+                            if (document.getElementById("number_t").value.length > 0) {
+                                $.post("/controllers/{{ id }}/add", $("#form").serialize())
+                                    .done(function (data) {
+                                        if (data === "ok") {
+                                            swal("Устройство добавлено", {icon: "success",});
+                                            setTimeout(() => {
+                                                location.href = "/controllers/{{ id }}"
+                                            }, 500);
+                                        } else {
+                                            swal("Произошла ошибка", {icon: "error",});
+                                        }
+                                    });
+                            } else {
+                                sweetAlert("Oops...", "Введите номер термостата", "error");
+                            }
+                        } else {
+                            sweetAlert("Oops...", "Введите номер gpio", "error");
+                        }
+                    } else {
+                        sweetAlert("Oops...", "Введите имя", "error");
+                    }
+            }
+            return false;
+        };
+    });
+</script>
+</body>
+</html>
+
+<!--<div class="load">
+	<div class="windows8">
+		<div class="wBall" id="wBall_1">
+			<div class="wInnerBall"></div>
+		</div>
+		<div class="wBall" id="wBall_2">
+			<div class="wInnerBall"></div>
+		</div>
+		<div class="wBall" id="wBall_3">
+			<div class="wInnerBall"></div>
+		</div>
+		<div class="wBall" id="wBall_4">
+			<div class="wInnerBall"></div>
+		</div>
+		<div class="wBall" id="wBall_5">
+			<div class="wInnerBall"></div>
+		</div>
+	</div>
+</div>-->
