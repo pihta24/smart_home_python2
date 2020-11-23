@@ -1,33 +1,45 @@
-import base64
-
-import pymongo
-from flask import json
-from threading import Thread
-
-from paho.mqtt import subscribe, publish
+import paho.mqtt.client as mqttClient
+import time
 
 """
-def on_message_print(client, userdata, message):
-	print(message.topic)
-	print(message.payload.decode('UTF-8'))
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        global Connected
+        Connected = True
+    else:
+        print("Connection failed")
 
 
-def t1():
-	subscribe.callback(on_message_print, "espmqtt15@gmail.com/ESP240AC45EEEC0/dsw1", hostname="mqtt.wifi-iot.com", auth={'username': 'espmqtt15@gmail.com', 'password': '626d0de3'})
+def on_message(client, userdata, message):
+    global stop
+    stop = True
+    str(message.payload)
 
 
-thread = Thread(target=t1)
-thread.start()
+stop = False
+Connected = False
 
-data = json.loads('{"value": false}')
-print(str(data['value']).lower())
-"""
+broker_address = "localhost"
+port = 1883
+user = "yourUser"
+password = "yourPassword"
 
-client = pymongo.MongoClient(
-    "mongodb+srv://pluser:iBmyIueKzpxtPEht@smarthome.42feq.mongodb.net/test?retryWrites=true&w=majority")
-db = client["test"]
-collection = db["test"]
+client = mqttClient.Client("Python")
+client.username_pw_set(user, password=password)
+client.on_connect = on_connect
+client.on_message = on_message
 
-# collection.insert_many([{"id": "2", "test1": 1, "test2": "2", "test3": True}, {"id": "3", "test1": 3, "test2": "4", "test5": False}])
-print(str(collection.find_one()["_id"]))
-client.close()
+client.connect(broker_address, port=port)
+
+client.loop_start()
+
+while not Connected:
+    time.sleep(0.1)
+
+client.subscribe("python/test")
+
+start = time.time()
+while time.time() - start < 1:
+    if stop:
+        print(1)
+        break"""

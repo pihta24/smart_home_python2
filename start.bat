@@ -1,0 +1,1 @@
+docker run --name smart-home -d -p 8000:5000 --rm -e DATABASE_URL="mongodb+srv://pluser:iBmyIueKzpxtPEht@smarthome.42feq.mongodb.net/test?retryWrites=true&w=majority" -e APP_SECRET_KEY="mh89v5cmn7x4v53sz03dxjn7590k94cm67q3u9ibhnytu3" -e YANDEX_SECRET_KEY="super super super secret secret" pihta24/smart-home:latest
