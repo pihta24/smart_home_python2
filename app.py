@@ -86,7 +86,7 @@ def get_sensors():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=get_sensors, trigger="interval", seconds=5)
+scheduler.add_job(func=get_sensors, trigger="interval", seconds=5, max_instances=3)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
